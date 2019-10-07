@@ -83,5 +83,56 @@ module.exports = function(api) {
     }
 }
 ```
+
+## Web app
+
+- Customize CRA
+
+`npm i -D customize-cra react-app-rewired`
+
+- config-overrides.js
+```js
+const { override, babelInclude, addWebpackAlias, removeModuleScopePlugin } = require('customize-cra');
+const path = require('path');
+
+module.exports = override(
+  removeModuleScopePlugin(),
+  babelInclude([path.resolve('src'), path.resolve(__dirname, '../shared')]),
+  addWebpackAlias({
+    '@shared': path.resolve(__dirname, '../shared/'),
+  }),
+);
+```
+
+- package.json
+```json
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+  },
+```
+
+- tsconfig.json
+```json
+{
+    "extends": "./tsconfig.paths.json",
+    ...
+}
+```
+
+- tsconfig.paths.json
+```json
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@shared/*": ["../shared/src/*"]
+        }
+    }
+}
+```
+
 ## Shared project
 - `npm i -D @babel/runtime`
